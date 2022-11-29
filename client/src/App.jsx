@@ -39,7 +39,9 @@ function App() {
         />
         <ul id="messages" className="messages">
           {messages.map((message) => (
-            <li key={message.id}>{message.msg}</li>
+            <li key={message.id}>
+              {message.nick}: {message.msg}
+            </li>
           ))}
         </ul>
         <div className="textBox">
