@@ -4,15 +4,23 @@ import { useSocket } from "./useSocket"
 import { useStickyState } from "./useStickyState"
 
 function App() {
-  const [nick, setNick] = useStickyState("", "nickname")
-  const [socket, isConnected, messages] = useSocket()
+  const {
+    socket,
+    isConnected,
+    messages,
+    rooms,
+    currentRoom,
+    joinRoom,
+    nick,
+    setNick,
+  } = useSocket()
   const inputRef = useRef(null)
 
   const sendMessage = (e) => {
     e.preventDefault()
     const msg = inputRef.current.value
 
-    if (msg === "") {
+    if (msg === "" || nick === "") {
       return
     }
 
@@ -21,29 +29,45 @@ function App() {
       nick: nick,
       time: Date.now(),
     })
+    inputRef.current.value = ""
+  }
+
+  const changeNickname = (e) => {
+    const newNick = e.target.value
+    setNick(newNick)
   }
 
   return (
-    <div className="content">
+    <div className="container">
       <h1>Chat App</h1>
       connected?: {isConnected ? "true" : "false"}
       <form id="form" onSubmit={sendMessage}>
         Nickname:
-        <input
-          type="text"
-          defaultValue={nick}
-          onChange={(e) => {
-            const newNick = e.target.value
-            setNick(newNick)
-          }}
-        />
-        <ul id="messages" className="messages">
-          {messages.map((message) => (
-            <li key={message.id}>
-              {message.nick}: {message.msg}
-            </li>
-          ))}
-        </ul>
+        <input type="text" defaultValue={nick} onChange={changeNickname} />
+        <main className="horizontalPanel">
+          <ul className="rooms">
+            {rooms.map((room) => (
+              <li
+                key={room}
+                className={room === currentRoom ? "joinedRoom" : ""}
+                onClick={() => {
+                  if (room !== currentRoom) {
+                    joinRoom(room)
+                  }
+                }}
+              >
+                {room}
+              </li>
+            ))}
+          </ul>
+          <div id="messages" className="messages">
+            {messages.map((message) => (
+              <div key={message.id} className="message">
+                {message.nick}: {message.msg}
+              </div>
+            ))}
+          </div>
+        </main>
         <div className="textBox">
           Message: <input type="text" id="input" ref={inputRef} />
           <input type="submit" value="Send" />

@@ -1,14 +1,33 @@
-.content {
+.container {
   margin: 0 auto;
   width: 500px;
 }
+.horizontalPanel {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  display: flex;
+}
+
+.rooms {
+  width: 100px;
+  min-height: 300px;
+  border: 1px solid black;
+  padding: 0;
+  margin: 0;
+}
+.rooms li {
+  list-style-type: none;
+}
+
 .messages {
+  margin-left: 0.5em;
   width: 500px;
-  height: 300px;
+  min-height: 300px;
   border: 1px solid black;
   overflow: scroll;
   overflow-x: hidden;
 }
-.messages > li {
-  list-style-type: none;
+
+.joinedRoom {
+  background-color: lightblue;
 }
