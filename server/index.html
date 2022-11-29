@@ -23,6 +23,8 @@
     <div class="content">
       <form id="form">
         <h1>Chat App</h1>
+        <input type="text" />
+        <button type="button" onclick="setNickname()">Change nickname</button>
         <ul id="messages" class="messages"></ul>
         <div class="textBox">
           Message: <input type="text" id="input" /><button>Send</button>
@@ -31,6 +33,8 @@
     </div>
 
     <script>
+      // var nickname = promptNickname()
+      var nickname = localStorage.getItem("nickname") || ""
       var socket = io()
 
       var messages = document.getElementById("messages")
@@ -40,17 +44,26 @@
       form.addEventListener("submit", function (e) {
         e.preventDefault()
         if (input.value) {
-          socket.emit("chat message", input.value)
+          socket.emit("msg", {
+            msg: input.value,
+            nick: nickname,
+            time: Date.now(),
+          })
           input.value = ""
         }
       })
 
-      socket.on("chat message", function (msg) {
+      socket.on("msg", function (msg) {
         var item = document.createElement("li")
         item.textContent = msg
         messages.appendChild(item)
         window.scrollTo(0, document.body.scrollHeight)
       })
+
+      function setNickname() {
+        nickname = prompt("Nickname?")
+        localStorage.setItem("nickname", nickname)
+      }
     </script>
   </body>
 </html>
