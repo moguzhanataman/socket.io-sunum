@@ -1,3 +1,4 @@
+const { randomUUID } = require("crypto")
 const express = require("express")
 const app = express()
 const http = require("http")
@@ -16,9 +17,15 @@ app.get("/", (req, res) => {
 })
 
 io.on("connection", (socket) => {
+  console.log("client connected", socket.id)
   socket.on(MESSAGE_TYPES.chatMessage, (payload) => {
     console.log({ payload })
-    io.emit("msg", payload.msg)
+    payload.id = randomUUID()
+    io.emit("msg", payload)
+  })
+
+  socket.on("disconnect", (reason) => {
+    console.log("a client disconnected, reason: ", reason)
   })
 })
 
