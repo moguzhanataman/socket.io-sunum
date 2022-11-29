@@ -12,25 +12,45 @@
         margin: 0 auto;
         width: 500px;
       }
-      .chatBox {
+      .messages {
         width: 500px;
         height: 300px;
+        border: 1px solid black;
       }
     </style>
   </head>
   <body>
+    <div class="content">
+      <form id="form">
+        <h1>Chat App</h1>
+        <ul id="messages" class="messages"></ul>
+        <div class="textBox">
+          Message: <input type="text" id="input" /><button>Send</button>
+        </div>
+      </form>
+    </div>
+
     <script>
       var socket = io()
-    </script>
 
-    <div class="content">
-      <h1>Chat App</h1>
-      <div>
-        <textarea class="chatBox" contenteditable="false"></textarea>
-      </div>
-      <div class="textBox">
-        Message: <input type="text" /><button>Send</button>
-      </div>
-    </div>
+      var messages = document.getElementById("messages")
+      var form = document.getElementById("form")
+      var input = document.getElementById("input")
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault()
+        if (input.value) {
+          socket.emit("chat message", input.value)
+          input.value = ""
+        }
+      })
+
+      socket.on("chat message", function (msg) {
+        var item = document.createElement("li")
+        item.textContent = msg
+        messages.appendChild(item)
+        window.scrollTo(0, document.body.scrollHeight)
+      })
+    </script>
   </body>
 </html>
