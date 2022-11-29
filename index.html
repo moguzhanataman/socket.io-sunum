@@ -6,10 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat App</title>
     <script src="/socket.io/socket.io.js"></script>
+
+    <style>
+      .content {
+        margin: 0 auto;
+        width: 500px;
+      }
+      .chatBox {
+        width: 500px;
+        height: 300px;
+      }
+    </style>
   </head>
   <body>
     <script>
       var socket = io()
     </script>
+
+    <div class="content">
+      <h1>Chat App</h1>
+      <div>
+        <textarea class="chatBox"></textarea>
+      </div>
+      <div class="textBox">Message: <input type="text" /></div>
+    </div>
   </body>
 </html>
